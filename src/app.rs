@@ -1,49 +1,71 @@
+use arboard::Clipboard;
 use std::error;
+use tts::Tts;
 
-/// Application result type.
 pub type AppResult<T> = std::result::Result<T, Box<dyn error::Error>>;
 
-/// Application.
-#[derive(Debug)]
+// #[derive(Debug)]
 pub struct App {
-    /// Is the application running?
     pub running: bool,
-    /// counter
-    pub counter: u8,
+    pub clipboard: Clipboard,
+    pub tts: Tts,
+    pub pause: bool,
+    pub text: String,
 }
 
 impl Default for App {
     fn default() -> Self {
         Self {
             running: true,
-            counter: 0,
+            clipboard: Clipboard::new().unwrap(),
+            tts: Tts::default().unwrap(),
+            pause: false,
+            text: String::from(""),
         }
     }
 }
 
 impl App {
-    /// Constructs a new instance of [`App`].
     pub fn new() -> Self {
         Self::default()
     }
 
-    /// Handles the tick event of the terminal.
-    pub fn tick(&self) {}
+    pub fn tick(&mut self) {
+        match self.clipboard.get_text() {
+            Ok(contents) => {
+                if self.pause {
+                    if self.tts.is_speaking().unwrap() {
+                        self.tts.stop().unwrap();
+                    } else {
+                        self.tts.speak(&contents, true).unwrap(); // TODO: actual pause + callbacks + stop exit error + features
+                        self.text = contents;
+                    }
+                    self.pause = false;
+                } else if self.text != contents {
+                    self.tts.speak(&contents, true).unwrap();
+                    self.text = contents;
+                }
+            }
+            Err(_e) => (), // log the errors
+        }
+    }
 
-    /// Set running to false to quit the application.
     pub fn quit(&mut self) {
         self.running = false;
     }
-
-    pub fn increment_counter(&mut self) {
-        if let Some(res) = self.counter.checked_add(1) {
-            self.counter = res;
-        }
-    }
-
-    pub fn decrement_counter(&mut self) {
-        if let Some(res) = self.counter.checked_sub(1) {
-            self.counter = res;
-        }
-    }
+    // let Features {
+    //     utterance_callbacks,
+    //     ..
+    // } = tts.supported_features();
+    // if utterance_callbacks {
+    // tts.on_utterance_begin(Some(Box::new(|utterance| {
+    // println!("Started speaking {:?}", utterance)
+    // })))?;
+    // tts.on_utterance_end(Some(Box::new(|utterance| {
+    // println!("Finished speaking {:?}", utterance)
+    // })))?;
+    // tts.on_utterance_stop(Some(Box::new(|utterance| {
+    // println!("Stopped speaking {:?}", utterance)
+    // })))?;
+    // }
 }
