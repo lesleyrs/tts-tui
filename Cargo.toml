@@ -1,0 +1,25 @@
+[package]
+name = "tts-tui"
+version = "0.0.2"
+edition = "2021"
+description = "Clipboard Narrator in the terminal"
+repository = "https://github.com/lesleyrs/tts-tui"
+license = "GPL-3.0-or-later"
+keywords = ["tts", "text-to-speech", "tui", "clipboard", "narrator"]
+categories = ["accessibility", "command-line-utilities", "multimedia::audio"]
+
+[features]
+default = ["11"]
+9 = ["tts/speech_dispatcher_0_9"]
+10 = ["tts/speech_dispatcher_0_10"]
+11 = ["tts/speech_dispatcher_0_11"]
+
+[dependencies]
+arboard = { version = "3.2.0", default-features = false }
+crossterm = { version = "0.26.1", default-features = false }
+tts = { version = "0.25.5", default-features = false }
+tui = { package = "ratatui", version = "0.20.1" }
+
+[[bin]]
+name = "tts"
+path = "src/main.rs"
