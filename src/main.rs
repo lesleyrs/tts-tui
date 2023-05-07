@@ -1,3 +1,4 @@
+use crossterm::terminal::LeaveAlternateScreen;
 use std::io;
 use tts_tui::app::{App, AppResult};
 use tts_tui::event::{Event, EventHandler};
@@ -7,6 +8,15 @@ use tui::backend::CrosstermBackend;
 use tui::Terminal;
 
 fn main() -> AppResult<()> {
+    // panic handler to always restore terminal
+    let original_hook = std::panic::take_hook();
+
+    std::panic::set_hook(Box::new(move |panic| {
+        let _ = crossterm::terminal::disable_raw_mode();
+        let _ = crossterm::execute!(io::stdout(), LeaveAlternateScreen);
+        original_hook(panic);
+    }));
+
     let mut app = App::new();
 
     let backend = CrosstermBackend::new(io::stderr());
