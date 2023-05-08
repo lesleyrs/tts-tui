@@ -8,7 +8,7 @@ use tui::{
 };
 
 pub fn render<B: Backend>(app: &mut App, frame: &mut Frame<'_, B>) {
-    let clipboard = app.clipboard.get_text().unwrap();
+    let clipboard = app.clipboard.get_text().unwrap_or_default();
     frame.render_widget(
         Paragraph::new(&*clipboard)
             .wrap(Wrap { trim: false }) // true or false
