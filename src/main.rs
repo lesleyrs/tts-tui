@@ -1,5 +1,5 @@
 use crossterm::terminal::LeaveAlternateScreen;
-use std::io;
+use std::{io, process};
 use tts_tui::app::{App, AppResult};
 use tts_tui::event::{Event, EventHandler};
 use tts_tui::handler::handle_key_events;
@@ -8,6 +8,40 @@ use tui::backend::CrosstermBackend;
 use tui::Terminal;
 
 fn main() -> AppResult<()> {
+    let mut args = std::env::args();
+    let name = env!("CARGO_PKG_NAME");
+    let version = env!("CARGO_PKG_VERSION");
+    match args.nth(1) {
+        Some(arg) if arg == "--version" || arg.starts_with("-V") => {
+            println!("{name} {version}\n");
+            process::exit(0);
+        }
+        Some(arg) if arg == "--help" || arg.starts_with("-h") => {
+            println!("{name} {version}");
+            println!(env!("CARGO_PKG_DESCRIPTION"));
+            println!("{}/releases/tag/{version}\n", env!("CARGO_PKG_REPOSITORY"));
+            println!("USAGE:");
+            println!("  <space>\n  \tToggle speech");
+            println!("  <s>\n  \tStop speech\n");
+            process::exit(0);
+        }
+        Some(arg) if arg.starts_with('-') => {
+            if arg.starts_with("--") {
+                eprintln!(
+                    "error: unexpected argument '{}' found",
+                    arg.split_whitespace().next().unwrap(),
+                );
+            } else if arg.starts_with('-') {
+                eprintln!(
+                    "error: unexpected argument '{}' found",
+                    arg.get(..2).get_or_insert("-")
+                );
+            }
+            eprintln!("\n  try --help\n");
+            process::exit(0);
+        }
+        _ => {}
+    }
     // panic handler to always restore terminal
     let original_hook = std::panic::take_hook();
 
