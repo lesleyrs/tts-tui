@@ -44,7 +44,7 @@ impl EventHandler {
                     }
 
                     if last_tick.elapsed() >= tick_rate {
-                        sender.send(Event::Tick).expect("failed to send tick event");
+                        sender.send(Event::Tick).ok(); // shutdown doesn't need to be handled
                         last_tick = Instant::now();
                     }
                 }

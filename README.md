@@ -11,6 +11,8 @@ delay each time you start a voice | no delay
 
 Windows built-in narrator has a different use case but does use the system voices.
 
+This is the terminal UI version of https://github.com/lesleyrs/clipboard-narrator but using WinRT to allow using any voice on windows.
+
 The binary is called `tts` for brevity, pre-built binaries will be available soon.
 
 ## Windows

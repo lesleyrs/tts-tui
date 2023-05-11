@@ -20,6 +20,7 @@ fn main() -> AppResult<()> {
             println!("{name} {version}");
             println!(env!("CARGO_PKG_DESCRIPTION"));
             println!("{}/releases/tag/{version}\n", env!("CARGO_PKG_REPOSITORY"));
+            println!("The only options are --version and --help\n");
             println!("USAGE:");
             println!("  <space>\n  \tToggle speech");
             println!("  <s>\n  \tStop speech\n");

@@ -37,7 +37,7 @@ impl App {
                     if self.tts.is_speaking().unwrap() {
                         self.tts.stop().unwrap();
                     } else {
-                        self.tts.speak(&contents, true).unwrap(); // TODO: actual pause + callbacks + stop exit error + features
+                        self.tts.speak(&contents, true).unwrap(); // add actual pause
                         self.text = contents;
                     }
                     self.pause = false;
