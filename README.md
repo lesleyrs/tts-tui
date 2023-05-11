@@ -14,7 +14,7 @@ Windows built-in narrator has a different use case but does use the system voice
 ## How to get
 Install | Build | Binaries
 |---|---|---|
-cargo install tts-tui | cargo r --release | [Github releases](https://github.com/lesleyrs/tts-tui/releases/latest)
+cargo install tts-tui | cargo r --release | [Github releases](../../releases/latest)
 
 The binary is called `tts` for brevity
 
