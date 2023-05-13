@@ -7,19 +7,21 @@ use tts_tui::tui::Tui;
 use tui::backend::CrosstermBackend;
 use tui::Terminal;
 
+const NAME: &str = env!("CARGO_PKG_NAME");
+const VERSION: &str = env!("CARGO_PKG_VERSION");
+const REPO: &str = env!("CARGO_PKG_REPOSITORY");
+
 fn main() -> AppResult<()> {
     let mut args = std::env::args();
-    let name = env!("CARGO_PKG_NAME");
-    let version = env!("CARGO_PKG_VERSION");
     match args.nth(1) {
         Some(arg) if arg == "--version" || arg.starts_with("-V") => {
-            println!("{name} {version}\n");
+            println!("{NAME} {VERSION}\n");
             process::exit(0);
         }
         Some(arg) if arg == "--help" || arg.starts_with("-h") => {
-            println!("{name} {version}");
+            println!("{NAME} {VERSION}");
             println!(env!("CARGO_PKG_DESCRIPTION"));
-            println!("{}/releases/tag/{version}\n", env!("CARGO_PKG_REPOSITORY"));
+            println!("{}/releases/tag/{VERSION}\n", REPO);
             println!("The only options are --version and --help\n");
             println!("USAGE:");
             println!("  <space>\n  \tToggle speech");
@@ -59,6 +61,7 @@ fn main() -> AppResult<()> {
     let events = EventHandler::new(250);
     let mut tui = Tui::new(terminal, events);
     tui.init(&app)?;
+    app.tts.set_rate(1.5).unwrap();
     while app.running {
         tui.draw(&mut app)?;
         match tui.events.next()? {
