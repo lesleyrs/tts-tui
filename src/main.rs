@@ -27,6 +27,8 @@ fn main() -> AppResult<()> {
             println!("  <space>\n  \tToggle speech");
             println!("  <s>\n  \tStop speech");
             println!("  <number>\n  \tCopy history");
+            println!("  <up/k>\n  \tScroll up");
+            println!("  <down/j>\n  \tScroll down");
             println!();
             process::exit(0);
         }

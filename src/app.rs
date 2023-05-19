@@ -13,6 +13,9 @@ pub struct App {
     pub history: Vec<String>,
     pub last_copy: String,
     pub text: String,
+    pub tab_length: u16,
+    pub selected: usize,
+    pub line: u16,
 }
 
 impl Default for App {
@@ -25,6 +28,9 @@ impl Default for App {
             history: Vec::with_capacity(10),
             last_copy: String::from(""),
             text: String::from(""),
+            tab_length: 3,
+            selected: 0,
+            line: 0,
         }
     }
 }
@@ -52,6 +58,7 @@ impl App {
                         self.history.pop();
                     }
                     self.history.insert(0, contents);
+                    self.selected = 0;
                 }
             }
             Err(_e) => (),
