@@ -40,11 +40,11 @@ impl EventHandler {
                             CrosstermEvent::Resize(w, h) => sender.send(Event::Resize(w, h)),
                             _ => Ok(()),
                         }
-                        .expect("failed to send terminal event")
+                        .ok();
                     }
 
                     if last_tick.elapsed() >= tick_rate {
-                        sender.send(Event::Tick).ok(); // shutdown doesn't need to be handled
+                        sender.send(Event::Tick).ok();
                         last_tick = Instant::now();
                     }
                 }

@@ -8,17 +8,16 @@ use tui::{
 };
 
 pub fn render<B: Backend>(app: &mut App, frame: &mut Frame<'_, B>) {
-    let clipboard = app.clipboard.get_text().unwrap_or_default();
     frame.render_widget(
-        Paragraph::new(&*clipboard)
+        Paragraph::new(&*app.text)
             .wrap(Wrap { trim: false }) // true or false
             .block(
                 Block::default()
                     .title(format!(
                         "{} chars {} words {} lines copied",
-                        clipboard.chars().count(),
-                        clipboard.split_whitespace().count(),
-                        clipboard.lines().count()
+                        app.text.chars().count(),
+                        app.text.split_whitespace().count(),
+                        app.text.lines().count()
                     ))
                     .title_alignment(Alignment::Center)
                     .borders(Borders::ALL)

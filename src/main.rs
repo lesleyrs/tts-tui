@@ -25,7 +25,9 @@ fn main() -> AppResult<()> {
             println!("The only options are --version and --help\n");
             println!("USAGE:");
             println!("  <space>\n  \tToggle speech");
-            println!("  <s>\n  \tStop speech\n");
+            println!("  <s>\n  \tStop speech");
+            println!("  <number>\n  \tCopy history");
+            println!();
             process::exit(0);
         }
         Some(arg) if arg.starts_with('-') => {

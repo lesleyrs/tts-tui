@@ -19,6 +19,22 @@ pub fn handle_key_events(key_event: KeyEvent, app: &mut App) -> AppResult<()> {
             KeyCode::Char(' ') => {
                 app.pause = !app.pause;
             }
+            KeyCode::Char(char) if char.is_ascii_digit() => match char {
+                '0' => {
+                    if app.history.len() == 10 {
+                        app.tts.speak(&app.history[9], true).unwrap();
+                        app.text = app.history[9].clone();
+                    }
+                }
+                _ => {
+                    if app.history.len() >= char as usize - 0x30 {
+                        app.tts
+                            .speak(&app.history[char as usize - 0x31], true)
+                            .unwrap();
+                        app.text = app.history[char as usize - 0x31].clone();
+                    }
+                }
+            },
             _ => {}
         }
     }
