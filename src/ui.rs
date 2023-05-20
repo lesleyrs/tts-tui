@@ -17,44 +17,61 @@ pub fn render<B: Backend>(app: &mut App, frame: &mut Frame<'_, B>) {
     .cloned()
     .map(Spans::from)
     .collect();
-    frame.render_widget(
-        Tabs::new(tabs)
-            .select(app.selected)
-            .block(
-                Block::default()
-                    .title(format!("History size: {}", app.history.len()))
-                    .borders(Borders::ALL)
-                    .border_type(BorderType::Rounded),
-            )
-            .style(Style::default().fg(Color::White))
-            .highlight_style(Style::default().fg(Color::Yellow))
-            .divider(DOT),
-        Rect::new(0, 0, frame.size().width, app.tab_length),
-    );
-    frame.render_widget(
-        Paragraph::new(&*app.text)
-            .wrap(Wrap { trim: true })
-            .block(
-                Block::default()
-                    .title(format!(
-                        "{} chars {} words {} lines copied",
-                        app.text.chars().count(),
-                        app.text.split_whitespace().count(),
-                        app.text.lines().count()
-                    ))
-                    .title_alignment(Alignment::Center)
-                    .borders(Borders::ALL)
-                    .border_type(BorderType::Rounded)
-                    .style(Style::default().fg(Color::White)),
-            )
-            .style(Style::default().fg(Color::LightYellow).bg(Color::Black))
-            .alignment(Alignment::Center)
-            .scroll((app.line, 0)),
-        Rect::new(
-            frame.size().x,
-            frame.size().y + app.tab_length,
-            frame.size().width,
-            frame.size().height - app.tab_length,
-        ),
-    )
+    if frame.size().height < 3 {
+        frame.render_widget(
+            Tabs::new(tabs)
+                .select(app.selected)
+                .block(
+                    Block::default()
+                        .title(format!("History size: {}", app.history.len()))
+                        .borders(Borders::ALL)
+                        .border_type(BorderType::Rounded),
+                )
+                .style(Style::default().fg(Color::White))
+                .highlight_style(Style::default().fg(Color::Yellow))
+                .divider(DOT),
+            Rect::new(0, 0, frame.size().width, frame.size().height),
+        );
+    } else {
+        frame.render_widget(
+            Tabs::new(tabs)
+                .select(app.selected)
+                .block(
+                    Block::default()
+                        .title(format!("History size: {}", app.history.len()))
+                        .borders(Borders::ALL)
+                        .border_type(BorderType::Rounded),
+                )
+                .style(Style::default().fg(Color::White))
+                .highlight_style(Style::default().fg(Color::Yellow))
+                .divider(DOT),
+            Rect::new(0, 0, frame.size().width, app.tab_length),
+        );
+        frame.render_widget(
+            Paragraph::new(&*app.text)
+                .wrap(Wrap { trim: true })
+                .block(
+                    Block::default()
+                        .title(format!(
+                            "{} chars {} words {} lines copied",
+                            app.text.chars().count(),
+                            app.text.split_whitespace().count(),
+                            app.text.lines().count()
+                        ))
+                        .title_alignment(Alignment::Center)
+                        .borders(Borders::ALL)
+                        .border_type(BorderType::Rounded)
+                        .style(Style::default().fg(Color::White)),
+                )
+                .style(Style::default().fg(Color::LightYellow).bg(Color::Black))
+                .alignment(Alignment::Center)
+                .scroll((app.line, 0)),
+            Rect::new(
+                frame.size().x,
+                frame.size().y + app.tab_length,
+                frame.size().width,
+                frame.size().height - app.tab_length,
+            ),
+        )
+    }
 }

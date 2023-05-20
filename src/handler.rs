@@ -20,10 +20,10 @@ pub fn handle_key_events(key_event: KeyEvent, app: &mut App) -> AppResult<()> {
                 app.pause = !app.pause;
             }
             KeyCode::Up | KeyCode::Char('k') => {
-                app.line = app.line.saturating_sub(10);
+                app.line = app.line.saturating_sub(app.jump_length);
             }
             KeyCode::Down | KeyCode::Char('j') => {
-                app.line = app.line.saturating_add(10);
+                app.line = app.line.saturating_add(app.jump_length);
             }
             KeyCode::Char(char) if char.is_ascii_digit() => match char {
                 '0' => {

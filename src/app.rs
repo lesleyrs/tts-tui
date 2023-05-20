@@ -15,6 +15,7 @@ pub struct App {
     pub tab_length: u16,
     pub selected: usize,
     pub line: u16,
+    pub jump_length: u16,
 }
 
 impl Default for App {
@@ -30,6 +31,7 @@ impl Default for App {
             tab_length: 3,
             selected: 0,
             line: 0,
+            jump_length: 10,
         }
     }
 }
