@@ -49,7 +49,6 @@ fn main() -> AppResult<()> {
         }
         _ => {}
     }
-    // panic handler to always restore terminal
     let original_hook = std::panic::take_hook();
 
     std::panic::set_hook(Box::new(move |panic| {

@@ -4,7 +4,6 @@ use tts::Tts;
 
 pub type AppResult<T> = std::result::Result<T, Box<dyn error::Error>>;
 
-// #[derive(Debug)]
 pub struct App {
     pub running: bool,
     pub clipboard: Clipboard,
