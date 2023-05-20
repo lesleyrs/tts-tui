@@ -53,7 +53,7 @@ fn main() -> AppResult<()> {
 
     std::panic::set_hook(Box::new(move |panic| {
         let _ = crossterm::terminal::disable_raw_mode();
-        let _ = crossterm::execute!(io::stdout(), LeaveAlternateScreen);
+        let _ = crossterm::execute!(io::stderr(), LeaveAlternateScreen);
         original_hook(panic);
     }));
 
