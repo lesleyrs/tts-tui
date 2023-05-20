@@ -68,19 +68,4 @@ impl App {
     pub fn quit(&mut self) {
         self.running = false;
     }
-    // let Features {
-    //     utterance_callbacks,
-    //     ..
-    // } = tts.supported_features();
-    // if utterance_callbacks {
-    // tts.on_utterance_begin(Some(Box::new(|utterance| {
-    // println!("Started speaking {:?}", utterance)
-    // })))?;
-    // tts.on_utterance_end(Some(Box::new(|utterance| {
-    // println!("Finished speaking {:?}", utterance)
-    // })))?;
-    // tts.on_utterance_stop(Some(Box::new(|utterance| {
-    // println!("Stopped speaking {:?}", utterance)
-    // })))?;
-    // }
 }
