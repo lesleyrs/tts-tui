@@ -55,6 +55,7 @@ impl App {
                     self.tts.speak(&contents, true).unwrap();
                     self.last_copy = contents.clone();
                     self.text = contents.clone();
+                    self.line = 0;
                     if self.history.len() > 9 {
                         self.history.pop();
                     }
