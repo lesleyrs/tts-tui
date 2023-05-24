@@ -35,12 +35,12 @@ fn main() -> AppResult<()> {
         Some(arg) if arg.starts_with('-') => {
             if arg.starts_with("--") {
                 eprintln!(
-                    "error: unexpected argument '{}' found",
+                    "error: unexpected option '{}' found",
                     arg.split_whitespace().next().unwrap(),
                 );
-            } else if arg.starts_with('-') {
+            } else {
                 eprintln!(
-                    "error: unexpected argument '{}' found",
+                    "error: unexpected option '{}' found",
                     arg.get(..2).get_or_insert("-")
                 );
             }
