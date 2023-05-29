@@ -38,16 +38,16 @@ pub fn handle_key_events(key_event: KeyEvent, app: &mut App) -> AppResult<()> {
                 '0' => unsafe {
                     if app.history.len() == 10 {
                         app.selected = 9;
-                        app.tts.speak(&app.history[app.selected], true).unwrap();
-                        COPY = app.history[app.selected].clone();
+                        // app.tts.speak(&app.history[app.selected], true).unwrap();
+                        // COPY = app.history[app.selected].clone();
                         PARAGRAPH = 0;
                     }
                 },
                 _ => unsafe {
                     if app.history.len() >= char as usize - 0x30 {
                         app.selected = char as usize - 0x31;
-                        app.tts.speak(&app.history[app.selected], true).unwrap();
-                        COPY = app.history[app.selected].clone();
+                        // app.tts.speak(&app.history[app.selected], true).unwrap();
+                        // COPY = app.history[app.selected].clone();
                         PARAGRAPH = 0;
                     }
                 },
