@@ -48,11 +48,28 @@ impl App {
                     if self.tts.is_speaking().unwrap() {
                         self.tts.stop().unwrap();
                     } else {
-                        self.tts.speak(&self.text, true).unwrap();
+                        self.tts
+                            .speak(
+                                &self
+                                    .text
+                                    .chars()
+                                    .filter(|&c| c != '\n' && c != '\r')
+                                    .collect::<String>(),
+                                true,
+                            )
+                            .unwrap();
                     }
                     self.pause = false;
                 } else if self.last_copy != contents {
-                    self.tts.speak(&contents, true).unwrap();
+                    self.tts
+                        .speak(
+                            &contents
+                                .chars()
+                                .filter(|&c| c != '\n' && c != '\r')
+                                .collect::<String>(),
+                            true,
+                        )
+                        .unwrap();
                     self.last_copy = contents.clone();
                     self.text = contents.clone();
                     self.line = 0;
