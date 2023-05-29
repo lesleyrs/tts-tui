@@ -30,7 +30,7 @@ pub fn handle_key_events(key_event: KeyEvent, app: &mut App) -> AppResult<()> {
                 PARAGRAPH = PARAGRAPH.saturating_sub(1);
             },
             KeyCode::Right | KeyCode::Char('l') => unsafe {
-                if PARAGRAPH < VECTOR.len() - 1 {
+                if !VECTOR.is_empty() && PARAGRAPH < VECTOR.len() - 1 {
                     PARAGRAPH += 1;
                 }
             },

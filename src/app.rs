@@ -54,7 +54,7 @@ impl App {
         if utterance_callbacks {
             self.tts
                 .on_utterance_end(Some(Box::new(|_utterance| unsafe {
-                    if PARAGRAPH < VECTOR.len() - 1 {
+                    if !VECTOR.is_empty() && PARAGRAPH < VECTOR.len() - 1 {
                         PARAGRAPH += 1;
                     }
                 })))
@@ -75,9 +75,11 @@ impl App {
                     (self.last_paragraph, PARAGRAPH) = (0, 0);
                     TEMP = contents.chars().filter(|&c| c != '\r').collect();
                     VECTOR = TEMP.split("\n\n").filter(|s| !s.is_empty()).collect();
-                    self.tts
-                        .speak(VECTOR[PARAGRAPH].replace('\n', " "), true)
-                        .unwrap();
+                    if !VECTOR.is_empty() {
+                        self.tts
+                            .speak(VECTOR[PARAGRAPH].replace('\n', " "), true)
+                            .unwrap();
+                    }
                     self.last_copy = contents.clone();
                     COPY = contents.clone();
                     self.line = 0;
