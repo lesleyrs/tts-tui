@@ -1,10 +1,10 @@
-use crate::app::App;
+use crate::app::{App, COPY, PARAGRAPH, VECTOR};
 use tui::{
     backend::Backend,
     layout::{Alignment, Rect},
     style::{Color, Style},
     symbols::DOT,
-    text::Line,
+    text::{Line, Span},
     widgets::{Block, BorderType, Borders, Paragraph, Tabs, Wrap},
     Frame,
 };
@@ -47,31 +47,59 @@ pub fn render<B: Backend>(app: &mut App, frame: &mut Frame<'_, B>) {
                 .divider(DOT),
             Rect::new(0, 0, frame.size().width, app.tab_length),
         );
-        frame.render_widget(
-            Paragraph::new(&*app.text)
-                .wrap(Wrap { trim: true })
-                .block(
-                    Block::default()
-                        .title(format!(
-                            "{} chars {} words {} lines copied",
-                            app.text.chars().count(),
-                            app.text.split_whitespace().count(),
-                            app.text.lines().count()
-                        ))
-                        .title_alignment(Alignment::Center)
-                        .borders(Borders::ALL)
-                        .border_type(BorderType::Rounded)
-                        .style(Style::default().fg(Color::White)),
+        unsafe {
+            if !VECTOR.is_empty() {
+                let (head, tail) = VECTOR.split_at(PARAGRAPH);
+                let a = head.join("\n\n");
+                let b = tail.get(1..tail.len()).unwrap().join("\n\n");
+                let mut c = tail.first().unwrap().to_string();
+                if PARAGRAPH != 0 {
+                    c.insert(0, '\n');
+                }
+                c.push_str("\n\n");
+                let h = a.split_inclusive(|c| c == '\n');
+                let t = b.split_inclusive(|c| c == '\n');
+                let m = c.split_inclusive(|c| c == '\n');
+                let mut text = vec![];
+                for l in h {
+                    text.push(Line::from(l));
+                }
+                for l in m {
+                    text.push(Line::from(Span::styled(
+                        l,
+                        Style::default().bg(Color::Blue),
+                    )));
+                }
+                for l in t {
+                    text.push(Line::from(l));
+                }
+                frame.render_widget(
+                    Paragraph::new(text)
+                        .wrap(Wrap { trim: true })
+                        .block(
+                            Block::default()
+                                .title(format!(
+                                    "{} chars {} words {} lines copied",
+                                    COPY.chars().count(),
+                                    COPY.split_whitespace().count(),
+                                    COPY.lines().count()
+                                ))
+                                .title_alignment(Alignment::Center)
+                                .borders(Borders::ALL)
+                                .border_type(BorderType::Rounded)
+                                .style(Style::default().fg(Color::White)),
+                        )
+                        .style(Style::default().fg(Color::LightYellow).bg(Color::Black))
+                        .alignment(Alignment::Center)
+                        .scroll((app.line, 0)),
+                    Rect::new(
+                        frame.size().x,
+                        frame.size().y + app.tab_length,
+                        frame.size().width,
+                        frame.size().height - app.tab_length,
+                    ),
                 )
-                .style(Style::default().fg(Color::LightYellow).bg(Color::Black))
-                .alignment(Alignment::Center)
-                .scroll((app.line, 0)),
-            Rect::new(
-                frame.size().x,
-                frame.size().y + app.tab_length,
-                frame.size().width,
-                frame.size().height - app.tab_length,
-            ),
-        )
+            }
+        }
     }
 }

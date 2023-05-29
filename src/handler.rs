@@ -1,4 +1,5 @@
-use crate::app::{App, AppResult};
+use crate::app::{App, AppResult, COPY};
+use crate::app::{PARAGRAPH, VECTOR};
 use crossterm::event::{KeyCode, KeyEvent, KeyEventKind, KeyModifiers};
 
 pub fn handle_key_events(key_event: KeyEvent, app: &mut App) -> AppResult<()> {
@@ -25,21 +26,31 @@ pub fn handle_key_events(key_event: KeyEvent, app: &mut App) -> AppResult<()> {
             KeyCode::Down | KeyCode::Char('j') => {
                 app.line = app.line.saturating_add(app.jump_length);
             }
+            KeyCode::Left | KeyCode::Char('h') => unsafe {
+                PARAGRAPH = PARAGRAPH.saturating_sub(1);
+            },
+            KeyCode::Right | KeyCode::Char('l') => unsafe {
+                if PARAGRAPH < VECTOR.len() - 1 {
+                    PARAGRAPH += 1;
+                }
+            },
             KeyCode::Char(char) if char.is_ascii_digit() => match char {
-                '0' => {
+                '0' => unsafe {
                     if app.history.len() == 10 {
                         app.selected = 9;
                         app.tts.speak(&app.history[app.selected], true).unwrap();
-                        app.text = app.history[app.selected].clone();
+                        COPY = app.history[app.selected].clone();
+                        PARAGRAPH = 0;
                     }
-                }
-                _ => {
+                },
+                _ => unsafe {
                     if app.history.len() >= char as usize - 0x30 {
                         app.selected = char as usize - 0x31;
                         app.tts.speak(&app.history[app.selected], true).unwrap();
-                        app.text = app.history[app.selected].clone();
+                        COPY = app.history[app.selected].clone();
+                        PARAGRAPH = 0;
                     }
-                }
+                },
             },
             _ => {}
         }

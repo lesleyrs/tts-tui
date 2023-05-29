@@ -1,8 +1,13 @@
 use arboard::Clipboard;
 use std::error;
-use tts::Tts;
+use tts::{Features, Tts};
 
 pub type AppResult<T> = std::result::Result<T, Box<dyn error::Error>>;
+
+pub static mut PARAGRAPH: usize = 0;
+pub static mut TEMP: String = String::new();
+pub static mut VECTOR: Vec<&str> = Vec::new();
+pub static mut COPY: String = String::new();
 
 pub struct App {
     pub running: bool,
@@ -11,11 +16,11 @@ pub struct App {
     pub pause: bool,
     pub history: Vec<String>,
     pub last_copy: String,
-    pub text: String,
     pub tab_length: u16,
     pub selected: usize,
     pub line: u16,
     pub jump_length: u16,
+    pub last_paragraph: usize,
 }
 
 impl Default for App {
@@ -27,11 +32,11 @@ impl Default for App {
             pause: false,
             history: Vec::with_capacity(10),
             last_copy: String::from(""),
-            text: String::from(""),
             tab_length: 3,
             selected: 0,
             line: 0,
             jump_length: 10,
+            last_paragraph: 0,
         }
     }
 }
@@ -42,44 +47,52 @@ impl App {
     }
 
     pub fn tick(&mut self) {
+        let Features {
+            utterance_callbacks,
+            ..
+        } = self.tts.supported_features();
+        if utterance_callbacks {
+            self.tts
+                .on_utterance_end(Some(Box::new(|_utterance| unsafe {
+                    if PARAGRAPH < VECTOR.len() - 1 {
+                        PARAGRAPH += 1;
+                    }
+                })))
+                .unwrap();
+        }
         match self.clipboard.get_text() {
-            Ok(contents) => {
+            Ok(contents) => unsafe {
                 if self.pause {
                     if self.tts.is_speaking().unwrap() {
                         self.tts.stop().unwrap();
                     } else {
                         self.tts
-                            .speak(
-                                &self
-                                    .text
-                                    .chars()
-                                    .filter(|&c| c != '\n' && c != '\r')
-                                    .collect::<String>(),
-                                true,
-                            )
+                            .speak(VECTOR[PARAGRAPH].replace('\n', " "), true)
                             .unwrap();
                     }
                     self.pause = false;
                 } else if self.last_copy != contents {
+                    (self.last_paragraph, PARAGRAPH) = (0, 0);
+                    TEMP = contents.chars().filter(|&c| c != '\r').collect();
+                    VECTOR = TEMP.split("\n\n").filter(|s| !s.is_empty()).collect();
                     self.tts
-                        .speak(
-                            &contents
-                                .chars()
-                                .filter(|&c| c != '\n' && c != '\r')
-                                .collect::<String>(),
-                            true,
-                        )
+                        .speak(VECTOR[PARAGRAPH].replace('\n', " "), true)
                         .unwrap();
                     self.last_copy = contents.clone();
-                    self.text = contents.clone();
+                    COPY = contents.clone();
                     self.line = 0;
                     if self.history.len() > 9 {
                         self.history.pop();
                     }
                     self.history.insert(0, contents);
                     self.selected = 0;
+                } else if self.last_paragraph != PARAGRAPH {
+                    self.last_paragraph = PARAGRAPH;
+                    self.tts
+                        .speak(VECTOR[PARAGRAPH].replace('\n', " "), true)
+                        .unwrap();
                 }
-            }
+            },
             Err(_e) => (),
         }
     }
