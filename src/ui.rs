@@ -4,7 +4,7 @@ use tui::{
     layout::{Alignment, Rect},
     style::{Color, Style},
     symbols::DOT,
-    text::Spans,
+    text::Line,
     widgets::{Block, BorderType, Borders, Paragraph, Tabs, Wrap},
     Frame,
 };
@@ -15,7 +15,7 @@ pub fn render<B: Backend>(app: &mut App, frame: &mut Frame<'_, B>) {
     ]
     .iter()
     .cloned()
-    .map(Spans::from)
+    .map(Line::from)
     .collect();
     if frame.size().height < 3 {
         frame.render_widget(

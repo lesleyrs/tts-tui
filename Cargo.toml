@@ -18,7 +18,7 @@ default = ["11"]
 arboard = { version = "3.2.0", default-features = false }
 crossterm = { version = "0.26.1", default-features = false }
 tts = { version = "0.25.5", default-features = false }
-tui = { package = "ratatui", version = "0.20.1" }
+tui = { package = "ratatui", version = "0.21.0" }
 
 [[bin]]
 name = "tts"
