@@ -34,7 +34,7 @@ impl Default for App {
             last_copy: String::from(""),
             tab_length: 3,
             selected: 0,
-            jump_length: 10,
+            jump_length: 15,
             last_paragraph: 0,
         }
     }

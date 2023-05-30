@@ -14,7 +14,9 @@ pub fn handle_key_events(key_event: KeyEvent, app: &mut App) -> AppResult<()> {
                 }
             }
             KeyCode::Char('s') => {
-                app.tts.stop()?;
+                if app.tts.is_speaking()? {
+                    app.tts.stop()?;
+                }
                 app.pause = false;
             }
             KeyCode::Char(' ') => {

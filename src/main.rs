@@ -64,6 +64,7 @@ fn main() -> AppResult<()> {
     let events = EventHandler::new(250);
     let mut tui = Tui::new(terminal, events);
     tui.init(&app)?;
+    // TTS options shortcut seems unnecessary, this is fine
     app.tts.set_rate(1.5).unwrap();
     while app.running {
         tui.draw(&mut app)?;

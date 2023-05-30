@@ -94,7 +94,7 @@ pub fn render<B: Backend>(app: &mut App, frame: &mut Frame<'_, B>) {
                         )
                         .style(Style::default().fg(Color::Yellow).bg(Color::Black))
                         .alignment(Alignment::Center)
-                        .scroll((LINE, 0)),
+                        .scroll((LINE, 0)), // no autoscroll, can't determine text length with wrap
                     Rect::new(
                         frame.size().x,
                         frame.size().y + app.tab_length,
