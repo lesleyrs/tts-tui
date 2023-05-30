@@ -1,4 +1,4 @@
-use crate::app::{App, AppResult, COPY};
+use crate::app::{App, AppResult, LINE};
 use crate::app::{PARAGRAPH, VECTOR};
 use crossterm::event::{KeyCode, KeyEvent, KeyEventKind, KeyModifiers};
 
@@ -20,12 +20,12 @@ pub fn handle_key_events(key_event: KeyEvent, app: &mut App) -> AppResult<()> {
             KeyCode::Char(' ') => {
                 app.pause = !app.pause;
             }
-            KeyCode::Up | KeyCode::Char('k') => {
-                app.line = app.line.saturating_sub(app.jump_length);
-            }
-            KeyCode::Down | KeyCode::Char('j') => {
-                app.line = app.line.saturating_add(app.jump_length);
-            }
+            KeyCode::Up | KeyCode::Char('k') => unsafe {
+                LINE = LINE.saturating_sub(app.jump_length);
+            },
+            KeyCode::Down | KeyCode::Char('j') => unsafe {
+                LINE = LINE.saturating_add(app.jump_length);
+            },
             KeyCode::Left | KeyCode::Char('h') => unsafe {
                 PARAGRAPH = PARAGRAPH.saturating_sub(1);
             },
@@ -41,6 +41,7 @@ pub fn handle_key_events(key_event: KeyEvent, app: &mut App) -> AppResult<()> {
                         // app.tts.speak(&app.history[app.selected], true).unwrap();
                         // COPY = app.history[app.selected].clone();
                         PARAGRAPH = 0;
+                        LINE = 0;
                     }
                 },
                 _ => unsafe {
@@ -49,6 +50,7 @@ pub fn handle_key_events(key_event: KeyEvent, app: &mut App) -> AppResult<()> {
                         // app.tts.speak(&app.history[app.selected], true).unwrap();
                         // COPY = app.history[app.selected].clone();
                         PARAGRAPH = 0;
+                        LINE = 0;
                     }
                 },
             },

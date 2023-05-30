@@ -8,6 +8,7 @@ pub static mut PARAGRAPH: usize = 0;
 pub static mut TEMP: String = String::new();
 pub static mut VECTOR: Vec<&str> = Vec::new();
 pub static mut COPY: String = String::new();
+pub static mut LINE: u16 = 0;
 
 pub struct App {
     pub running: bool,
@@ -18,7 +19,6 @@ pub struct App {
     pub last_copy: String,
     pub tab_length: u16,
     pub selected: usize,
-    pub line: u16,
     pub jump_length: u16,
     pub last_paragraph: usize,
 }
@@ -34,7 +34,6 @@ impl Default for App {
             last_copy: String::from(""),
             tab_length: 3,
             selected: 0,
-            line: 0,
             jump_length: 10,
             last_paragraph: 0,
         }
@@ -82,7 +81,7 @@ impl App {
                     }
                     self.last_copy = contents.clone();
                     COPY = contents.clone();
-                    self.line = 0;
+                    LINE = 0;
                     if self.history.len() > 9 {
                         self.history.pop();
                     }

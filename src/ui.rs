@@ -1,4 +1,4 @@
-use crate::app::{App, COPY, PARAGRAPH, VECTOR};
+use crate::app::{App, COPY, LINE, PARAGRAPH, VECTOR};
 use tui::{
     backend::Backend,
     layout::{Alignment, Rect},
@@ -91,7 +91,7 @@ pub fn render<B: Backend>(app: &mut App, frame: &mut Frame<'_, B>) {
                         )
                         .style(Style::default().fg(Color::LightYellow).bg(Color::Black))
                         .alignment(Alignment::Center)
-                        .scroll((app.line, 0)),
+                        .scroll((LINE, 0)),
                     Rect::new(
                         frame.size().x,
                         frame.size().y + app.tab_length,
