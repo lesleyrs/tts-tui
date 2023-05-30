@@ -11,7 +11,7 @@ delay each time you start a voice | little to no delay
 
 Windows built-in narrator has a different use case but does use the system voices.
 
-PDF readers don't allow copying newlines between paragraphs so they can't be split directly, convert the pdf to a different format first.
+PDF readers don't allow copying newlines between paragraphs so they can't be split directly, convert it to a txt file with the original layout first.
 
 ## How to get
 Install | Build | Binaries
