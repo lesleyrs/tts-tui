@@ -61,6 +61,7 @@ impl App {
         }
         match self.clipboard.get_text() {
             Ok(contents) => unsafe {
+                // pause doesn't stop actions from starting tts intentionally
                 if self.pause {
                     if self.tts.is_speaking().unwrap() {
                         self.tts.stop().unwrap();
