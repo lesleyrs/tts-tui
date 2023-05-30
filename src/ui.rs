@@ -49,17 +49,20 @@ pub fn render<B: Backend>(app: &mut App, frame: &mut Frame<'_, B>) {
         );
         unsafe {
             if !VECTOR.is_empty() {
+                if VECTOR[VECTOR.len() - 1] == "\n" {
+                    VECTOR.pop();
+                }
                 let (head, tail) = VECTOR.split_at(PARAGRAPH);
                 let a = head.join("\n\n");
-                let b = tail.get(1..tail.len()).unwrap().join("\n\n");
-                let mut c = tail.first().unwrap().to_string();
+                let mut b = tail.first().unwrap().to_string();
+                let c = tail.get(1..tail.len()).unwrap().join("\n\n");
                 if PARAGRAPH != 0 {
-                    c.insert(0, '\n');
+                    b.insert(0, '\n');
                 }
-                c.push_str("\n\n");
+                b.push_str("\n\n");
                 let h = a.split_inclusive(|c| c == '\n');
-                let t = b.split_inclusive(|c| c == '\n');
-                let m = c.split_inclusive(|c| c == '\n');
+                let m = b.split_inclusive(|c| c == '\n');
+                let t = c.split_inclusive(|c| c == '\n');
                 let mut text = vec![];
                 for l in h {
                     text.push(Line::from(l));
@@ -67,7 +70,7 @@ pub fn render<B: Backend>(app: &mut App, frame: &mut Frame<'_, B>) {
                 for l in m {
                     text.push(Line::from(Span::styled(
                         l,
-                        Style::default().bg(Color::Blue),
+                        Style::default().fg(Color::LightYellow),
                     )));
                 }
                 for l in t {
@@ -89,7 +92,7 @@ pub fn render<B: Backend>(app: &mut App, frame: &mut Frame<'_, B>) {
                                 .border_type(BorderType::Rounded)
                                 .style(Style::default().fg(Color::White)),
                         )
-                        .style(Style::default().fg(Color::LightYellow).bg(Color::Black))
+                        .style(Style::default().fg(Color::Yellow).bg(Color::Black))
                         .alignment(Alignment::Center)
                         .scroll((LINE, 0)),
                     Rect::new(
