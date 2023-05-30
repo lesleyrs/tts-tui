@@ -16,7 +16,7 @@ PDF readers don't allow copying newlines between paragraphs so they can't be spl
 ## How to get
 Install | Build | Binaries
 |---|---|---|
-cargo install tts-tui | cargo r --release | [Github releases](../../releases/latest)
+cargo install tts-tui | cargo r --release | [Github releases](https://github.com/lesleyrs/tts-tui/releases)
 
 The binary is called `tts` for brevity
 
