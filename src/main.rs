@@ -26,9 +26,11 @@ fn main() -> AppResult<()> {
             println!("USAGE:");
             println!("  <space>\n  \tToggle speech");
             println!("  <s>\n  \tStop speech");
-            println!("  <number>\n  \tCopy history");
+            println!("  <number>\n  \tHistory");
             println!("  <up/k>\n  \tScroll up");
             println!("  <down/j>\n  \tScroll down");
+            println!("  <left/h>\n  \tLast paragraph");
+            println!("  <right/l>\n  \tNext paragraph");
             println!();
             process::exit(0);
         }
