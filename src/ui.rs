@@ -82,7 +82,7 @@ pub fn render<B: Backend>(app: &mut App, frame: &mut Frame<'_, B>) {
                         .block(
                             Block::default()
                                 .title(format!(
-                                    "{} chars {} words {} lines copied",
+                                    "{} chars {} words {} lines copied", // after filtering out carriage return
                                     COPY.chars().count(),
                                     COPY.split_whitespace().count(),
                                     COPY.lines().count()

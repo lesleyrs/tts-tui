@@ -5,7 +5,6 @@ use tts::{Features, Tts};
 pub type AppResult<T> = std::result::Result<T, Box<dyn error::Error>>;
 
 pub static mut PARAGRAPH: usize = 0;
-pub static mut TEMP: String = String::new();
 pub static mut VECTOR: Vec<&str> = Vec::new();
 pub static mut COPY: String = String::new();
 pub static mut LINE: u16 = 0;
@@ -72,22 +71,19 @@ impl App {
                     }
                     self.pause = false;
                 } else if self.last_copy != contents {
-                    (self.last_paragraph, PARAGRAPH) = (0, 0);
-                    TEMP = contents.chars().filter(|&c| c != '\r').collect();
-                    VECTOR = TEMP.split("\n\n").filter(|s| !s.is_empty()).collect();
+                    self.last_copy = contents.clone();
+                    (self.last_paragraph, PARAGRAPH, LINE, self.selected) = (0, 0, 0, 0);
+                    COPY = contents.chars().filter(|&c| c != '\r').collect();
+                    VECTOR = COPY.split("\n\n").filter(|s| !s.is_empty()).collect();
                     if !VECTOR.is_empty() {
                         self.tts
                             .speak(VECTOR[PARAGRAPH].replace('\n', " "), true)
                             .unwrap();
                     }
-                    self.last_copy = contents.clone();
-                    COPY = contents.clone();
-                    LINE = 0;
                     if self.history.len() > 9 {
                         self.history.pop();
                     }
                     self.history.insert(0, contents);
-                    self.selected = 0;
                 } else if self.last_paragraph != PARAGRAPH {
                     self.last_paragraph = PARAGRAPH;
                     self.tts
