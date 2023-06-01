@@ -39,20 +39,20 @@ pub fn handle_key_events(key_event: KeyEvent, app: &mut App) -> AppResult<()> {
             KeyCode::Char(char) if char.is_ascii_digit() => match char {
                 '0' => unsafe {
                     if app.history.len() == 10 {
+                        PARAGRAPH = 0;
+                        LINE = 0;
                         app.selected = 9;
                         // app.tts.speak(&app.history[app.selected], true).unwrap();
                         // COPY = app.history[app.selected].clone();
-                        PARAGRAPH = 0;
-                        LINE = 0;
                     }
                 },
                 _ => unsafe {
                     if app.history.len() >= char as usize - 0x30 {
+                        PARAGRAPH = 0;
+                        LINE = 0;
                         app.selected = char as usize - 0x31;
                         // app.tts.speak(&app.history[app.selected], true).unwrap();
                         // COPY = app.history[app.selected].clone();
-                        PARAGRAPH = 0;
-                        LINE = 0;
                     }
                 },
             },
