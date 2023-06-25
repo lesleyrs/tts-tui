@@ -8,7 +8,7 @@ use tui::{
     Frame,
 };
 
-pub fn render<B: Backend>(_app: &mut App, frame: &mut Frame<'_, B>) {
+pub fn render<B: Backend>(app: &mut App, frame: &mut Frame<'_, B>) {
     // let tabs = [
     //     "Tab 1", "Tab 2", "Tab 3", "Tab 4", "Tab 5", "Tab 6", "Tab 7", "Tab 8", "Tab 9", "Tab 10",
     // ]
@@ -81,10 +81,11 @@ pub fn render<B: Backend>(_app: &mut App, frame: &mut Frame<'_, B>) {
                     .block(
                         Block::default()
                             .title(format!(
-                                "{} chars {} words {} lines copied", // after filtering out carriage return
+                                "{} chars {} words {} lines copied - pdf mode: {}", // after filtering out carriage return
                                 COPY.chars().count(),
                                 COPY.split_whitespace().count(),
-                                COPY.lines().count()
+                                COPY.lines().count(),
+                                app.pdf_mode
                             ))
                             .title_alignment(Alignment::Center)
                             .borders(Borders::ALL)

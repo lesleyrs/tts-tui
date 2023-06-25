@@ -22,6 +22,9 @@ pub fn handle_key_events(key_event: KeyEvent, app: &mut App) -> AppResult<()> {
             KeyCode::Char(' ') => {
                 app.pause = !app.pause;
             }
+            KeyCode::Char('t') => {
+                app.pdf_mode = !app.pdf_mode;
+            }
             KeyCode::Up | KeyCode::Char('k') => unsafe {
                 LINE = LINE.saturating_sub(app.jump_length);
             },

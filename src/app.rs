@@ -20,6 +20,7 @@ pub struct App {
     pub selected: usize,
     pub jump_length: u16,
     pub last_paragraph: usize,
+    pub pdf_mode: bool,
 }
 
 impl Default for App {
@@ -35,6 +36,7 @@ impl Default for App {
             selected: 0,
             jump_length: 15,
             last_paragraph: 0,
+            pdf_mode: false,
         }
     }
 }
@@ -65,9 +67,13 @@ impl App {
                     if self.tts.is_speaking().unwrap() {
                         self.tts.stop().unwrap();
                     } else {
-                        self.tts
-                            .speak(VECTOR[PARAGRAPH].replace('\n', " "), true)
-                            .unwrap();
+                        match self.pdf_mode {
+                            false => self.tts.speak(VECTOR[PARAGRAPH], true).unwrap(),
+                            true => self
+                                .tts
+                                .speak(VECTOR[PARAGRAPH].replace('\n', " "), true)
+                                .unwrap(),
+                        };
                     }
                     self.pause = false;
                 } else if self.last_copy != contents {
@@ -76,9 +82,13 @@ impl App {
                     COPY = contents.chars().filter(|&c| c != '\r').collect();
                     VECTOR = COPY.split("\n\n").filter(|s| !s.is_empty()).collect();
                     if !VECTOR.is_empty() {
-                        self.tts
-                            .speak(VECTOR[PARAGRAPH].replace('\n', " "), true)
-                            .unwrap();
+                        match self.pdf_mode {
+                            false => self.tts.speak(VECTOR[PARAGRAPH], true).unwrap(),
+                            true => self
+                                .tts
+                                .speak(VECTOR[PARAGRAPH].replace('\n', " "), true)
+                                .unwrap(),
+                        };
                     }
                     if self.history.len() > 9 {
                         self.history.pop();
@@ -86,9 +96,13 @@ impl App {
                     self.history.insert(0, contents);
                 } else if self.last_paragraph != PARAGRAPH {
                     self.last_paragraph = PARAGRAPH;
-                    self.tts
-                        .speak(VECTOR[PARAGRAPH].replace('\n', " "), true)
-                        .unwrap();
+                    match self.pdf_mode {
+                        false => self.tts.speak(VECTOR[PARAGRAPH], true).unwrap(),
+                        true => self
+                            .tts
+                            .speak(VECTOR[PARAGRAPH].replace('\n', " "), true)
+                            .unwrap(),
+                    };
                 }
             },
             Err(_e) => (),
