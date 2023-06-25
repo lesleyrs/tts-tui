@@ -1,4 +1,4 @@
-# TTS-TUI
+# TTS TUI
 
 This is the terminal UI version of [Clipboard Narrator](https://github.com/lesleyrs/clipboard-narrator) but uses newer WinRT API to allow using any voice on windows.
 
