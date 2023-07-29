@@ -25,11 +25,17 @@ pub fn handle_key_events(key_event: KeyEvent, app: &mut App) -> AppResult<()> {
             KeyCode::Char('t') => {
                 app.pdf_mode = !app.pdf_mode;
             }
-            KeyCode::Up | KeyCode::Char('k') => unsafe {
-                LINE = LINE.saturating_sub(app.jump_length);
+            KeyCode::Up | KeyCode::Char('k') | KeyCode::PageUp => unsafe {
+                match key_event.code {
+                    KeyCode::PageUp => LINE = LINE.saturating_sub(app.jump_length * 3),
+                    _ => LINE = LINE.saturating_sub(app.jump_length),
+                }
             },
-            KeyCode::Down | KeyCode::Char('j') => unsafe {
-                LINE = LINE.saturating_add(app.jump_length);
+            KeyCode::Down | KeyCode::Char('j') | KeyCode::PageDown => unsafe {
+                match key_event.code {
+                    KeyCode::PageDown => LINE = LINE.saturating_add(app.jump_length * 3),
+                    _ => LINE = LINE.saturating_add(app.jump_length),
+                }
             },
             KeyCode::Left | KeyCode::Char('h') => unsafe {
                 PARAGRAPH = PARAGRAPH.saturating_sub(1);
